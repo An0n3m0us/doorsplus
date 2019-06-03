@@ -20,6 +20,10 @@ The trapdoors can have a different back and front texture using `doors_trapdoor_
 
 ## Installation
 
-Download it from the releases page then install it using the guide below:
+Download it here:
+
+https://github.com/An0n3m0us/doorsplus/archive/master.zip
+
+Then follow the guide below to install it:
 
 https://dev.minetest.net/Installing_Mods
