@@ -442,11 +442,11 @@ function doors.register(name, def)
 	def.selection_box = {type = "fixed", fixed = {-1/2,-1/2,-1/2,1/2,3/2,-6/16}}
 	def.collision_box = {type = "fixed", fixed = {-1/2,-1/2,-1/2,1/2,3/2,-6/16}}
 
-	if def.model == "new" then
-		def.mesh = "door_new_a.obj"
+	if def.model then
+		def.mesh = def.model .. "_a.obj"
 		minetest.register_node(":" .. name .. "_a", def)
 
-		def.mesh = "door_new_b.obj"
+		def.mesh = def.model .. "_b.obj"
 		minetest.register_node(":" .. name .. "_b", def)
 	else
 		def.mesh = "door_a.obj"
@@ -464,7 +464,7 @@ doors.register("door_wood", {
 		tiles = {{ name = "doors_door_wood.png", backface_culling = true }},
 		description = S("Wooden Door"),
 		inventory_image = "doors_item_wood.png",
-		model = "new",
+		model = "door_new",
 		groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
 		recipe = {
 			{"group:wood", "group:wood"},
@@ -477,7 +477,7 @@ doors.register("door_steel", {
 		tiles = {{name = "doors_door_steel.png", backface_culling = true}},
 		description = S("Steel Door"),
 		inventory_image = "doors_item_steel.png",
-		model = "new",
+		model = "door_new",
 		protected = true,
 		groups = {cracky = 1, level = 2},
 		sounds = default.node_sound_metal_defaults(),
