@@ -1,6 +1,6 @@
 -- doorsplus/init.lua
 
--- Overwrite doors function
+-- Overwrite doors function to add model argument
 
 -- Load support for MT game translation.
 local S = minetest.get_translator("doors")
@@ -430,42 +430,40 @@ function doors.register_trapdoor(name, def)
 	doors.registered_trapdoors[name_closed] = true
 end
 
--- END doors function
-
 doors.register("door_wood", {
-		description = S("Wooden Door"),
-		model = "door_new",
-		tiles = {"doors_door_wood.png"},
-		inventory_image = "doors_item_wood.png",
-		groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
-		recipe = {
-			{"group:wood", "group:wood"},
-			{"group:wood", "group:wood"},
-			{"group:wood", "group:wood"},
-		}
+	description = S("Wooden Door"),
+	model = "door_new",
+	tiles = {"doors_door_wood.png"},
+	inventory_image = "doors_item_wood.png",
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
+	recipe = {
+		{"group:wood", "group:wood"},
+		{"group:wood", "group:wood"},
+		{"group:wood", "group:wood"},
+	}
 })
 
 doors.register("door_steel", {
-		description = S("Steel Door"),
-		model = "door_new",
-		tiles = {"doors_door_steel.png"},
-		inventory_image = "doors_item_steel.png",
-		protected = true,
-		groups = {cracky = 1, level = 2},
-		sounds = default.node_sound_metal_defaults(),
-		sound_open = "doors_steel_door_open",
-		sound_close = "doors_steel_door_close",
-		recipe = {
-			{"default:steel_ingot", "default:steel_ingot"},
-			{"default:steel_ingot", "default:steel_ingot"},
-			{"default:steel_ingot", "default:steel_ingot"},
-		}
+	description = S("Steel Door"),
+	model = "door_new",
+	tiles = {"doors_door_steel.png"},
+	inventory_image = "doors_item_steel.png",
+	protected = true,
+	groups = {cracky = 1, level = 2},
+	sounds = default.node_sound_metal_defaults(),
+	sound_open = "doors_steel_door_open",
+	sound_close = "doors_steel_door_close",
+	recipe = {
+		{"default:steel_ingot", "default:steel_ingot"},
+		{"default:steel_ingot", "default:steel_ingot"},
+		{"default:steel_ingot", "default:steel_ingot"},
+	}
 })
 
 doors.register_trapdoor("trapdoor", {
 	description = S("Wooden Trapdoor"),
-	inventory_image = "doors_trapdoor.png",
 	model = "trapdoor_new",
+	inventory_image = "doors_trapdoor.png",
 	wield_image = "doors_trapdoor.png",
 	tile_front = "doors_trapdoor.png",
 	tile_side = "doors_trapdoor_side.png",
@@ -475,8 +473,8 @@ doors.register_trapdoor("trapdoor", {
 
 doors.register_trapdoor("trapdoor_steel", {
 	description = S("Steel Trapdoor"),
-	inventory_image = "doors_trapdoor_steel.png",
 	model = "trapdoor_new",
+	inventory_image = "doors_trapdoor_steel.png",
 	wield_image = "doors_trapdoor_steel.png",
 	tile_front = "doors_trapdoor_steel.png",
 	tile_side = "doors_trapdoor_steel_side.png",
@@ -487,3 +485,9 @@ doors.register_trapdoor("trapdoor_steel", {
 	sound_close = "doors_steel_door_close",
 	groups = {cracky = 1, level = 2, door = 1},
 })
+
+-- Load other doors mods
+
+if minetest.get_modpath("ts_doors") then
+	dofile(minetest.get_modpath("doorsplus").."/ts_doors.lua")
+end
