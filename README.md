@@ -2,7 +2,7 @@
 
 ![IMG](https://raw.githubusercontent.com/An0n3m0us/doorsplus/master/.doors.gif)
 
-A Minetest mod that overrides the default doors mod and improves it.
+A Minetest mod that improves the default doors mod and other doors mods.
 
 ## Additions
 
@@ -20,10 +20,8 @@ The trapdoors can have a different back and front texture using `doors_trapdoor_
 
 ## Installation
 
-Download it here:
+Download it here: https://github.com/An0n3m0us/doorsplus/archive/master.zip
 
-https://github.com/An0n3m0us/doorsplus/archive/master.zip
-
-Then follow the guide below to install it:
+Extract it into a folder called "doorsplus" then follow the guide below to install it:
 
 https://dev.minetest.net/Installing_Mods
