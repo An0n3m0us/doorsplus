@@ -5,6 +5,15 @@
 -- Load support for MT game translation.
 local S = minetest.get_translator("doors")
 
+local function replace_old_owner_information(pos)
+	local meta = minetest.get_meta(pos)
+	local owner = meta:get_string("doors_owner")
+	if owner and owner ~= "" then
+		meta:set_string("owner", owner)
+		meta:set_string("doors_owner", "")
+	end
+end
+
 local function on_place_node(place_to, newnode,
 	placer, oldnode, itemstack, pointed_thing)
 	-- Run script hook
@@ -24,6 +33,11 @@ local function on_place_node(place_to, newnode,
 		callback(place_to_copy, newnode_copy, placer,
 			oldnode_copy, itemstack, pointed_thing_copy)
 	end
+end
+
+local function can_dig_door(pos, digger)
+	replace_old_owner_information(pos)
+	return default.can_interact_with_node(digger, pos)
 end
 
 function doors.register(name, def)
@@ -148,7 +162,7 @@ function doors.register(name, def)
 				itemstack:take_item()
 			end
 
-			minetest.sound_play(def.sounds.place, {pos = pos})
+			minetest.sound_play(def.sounds.place, {pos = pos}, true)
 
 			on_place_node(pos, minetest.get_node(pos),
 				placer, node, itemstack, pointed_thing)
