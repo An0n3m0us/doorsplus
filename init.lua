@@ -1,6 +1,5 @@
 -- doorsplus/init.lua
 
--- Overwrite doors function to add model argument
 
 -- Load support for MT game translation.
 local S = minetest.get_translator("doors")
@@ -158,7 +157,7 @@ function doors.register(name, def)
 				meta:set_string("infotext", def.description .. "\n" .. S("Owned by @1", pn))
 			end
 
-			if not (creative and creative.is_enabled_for and creative.is_enabled_for(pn)) then
+			if not minetest.is_creative_enabled(pn) then
 				itemstack:take_item()
 			end
 
@@ -192,12 +191,21 @@ function doors.register(name, def)
 		def.sound_close = "doors_door_close"
 	end
 
+	if not def.gain_open then
+		def.gain_open = 0.3
+	end
+
+	if not def.gain_close then
+		def.gain_close = 0.3
+	end
+
 	def.groups.not_in_creative_inventory = 1
 	def.groups.door = 1
 	def.drop = name
 	def.door = {
 		name = name,
-		sounds = { def.sound_close, def.sound_open },
+		sounds = {def.sound_close, def.sound_open},
+		gains = {def.gain_close, def.gain_open},
 	}
 	if not def.on_rightclick then
 		def.on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
@@ -264,6 +272,7 @@ function doors.register(name, def)
 	def.buildable_to = false
 	def.selection_box = {type = "fixed", fixed = {-1/2,-1/2,-1/2,1/2,3/2,-6/16}}
 	def.collision_box = {type = "fixed", fixed = {-1/2,-1/2,-1/2,1/2,3/2,-6/16}}
+	def.use_texture_alpha = "clip"
 
 	if def.model then
 		def.mesh = def.model .. "_a.obj"
@@ -271,17 +280,65 @@ function doors.register(name, def)
 
 		def.mesh = def.model .. "_b.obj"
 		minetest.register_node(":" .. name .. "_b", def)
+
+		def.mesh = def.model .. "_a2.obj"
+		minetest.register_node(":" .. name .. "_c", def)
+
+		def.mesh = def.model .. "_b2.obj"
+		minetest.register_node(":" .. name .. "_d", def)
 	else
 		def.mesh = "door_a.obj"
 		minetest.register_node(":" .. name .. "_a", def)
 
 		def.mesh = "door_b.obj"
 		minetest.register_node(":" .. name .. "_b", def)
+
+		def.mesh = "door_a2.obj"
+		minetest.register_node(":" .. name .. "_c", def)
+
+		def.mesh = "door_b2.obj"
+		minetest.register_node(":" .. name .. "_d", def)
 	end
 
 	doors.registered_doors[name .. "_a"] = true
 	doors.registered_doors[name .. "_b"] = true
+	doors.registered_doors[name .. "_c"] = true
+	doors.registered_doors[name .. "_d"] = true
 end
+
+doors.register("door_wood", {
+	tiles = {{ name = "doors_door_wood.png", backface_culling = true }},
+	description = S("Wooden Door"),
+	model = "door_new",
+	inventory_image = "doors_item_wood.png",
+	groups = {node = 1, choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
+	gain_open = 0.06,
+	gain_close = 0.13,
+	recipe = {
+		{"group:wood", "group:wood"},
+		{"group:wood", "group:wood"},
+		{"group:wood", "group:wood"},
+	}
+})
+
+doors.register("door_steel", {
+	tiles = {{name = "doors_door_steel.png", backface_culling = true}},
+	description = S("Steel Door"),
+	model = "door_new",
+	inventory_image = "doors_item_steel.png",
+	protected = true,
+	groups = {node = 1, cracky = 1, level = 2},
+	sounds = default.node_sound_metal_defaults(),
+	sound_open = "doors_steel_door_open",
+	sound_close = "doors_steel_door_close",
+	gain_open = 0.2,
+	gain_close = 0.2,
+	recipe = {
+		{"default:steel_ingot", "default:steel_ingot"},
+		{"default:steel_ingot", "default:steel_ingot"},
+		{"default:steel_ingot", "default:steel_ingot"},
+	}
+})
 
 function doors.register_trapdoor(name, def)
 	if not name:find(":") then
@@ -301,6 +358,7 @@ function doors.register_trapdoor(name, def)
 	def.paramtype = "light"
 	def.paramtype2 = "facedir"
 	def.is_ground_content = false
+	def.use_texture_alpha = "clip"
 
 	if def.protected then
 		def.can_dig = can_dig_door
@@ -310,7 +368,7 @@ function doors.register_trapdoor(name, def)
 			meta:set_string("owner", pn)
 			meta:set_string("infotext", def.description .. "\n" .. S("Owned by @1", pn))
 
-			return (creative and creative.is_enabled_for and creative.is_enabled_for(pn))
+			return minetest.is_creative_enabled(pn)
 		end
 
 		def.on_blast = function() end
@@ -357,6 +415,14 @@ function doors.register_trapdoor(name, def)
 
 	if not def.sound_close then
 		def.sound_close = "doors_door_close"
+	end
+
+	if not def.gain_open then
+		def.gain_open = 0.3
+	end
+
+	if not def.gain_close then
+		def.gain_close = 0.3
 	end
 
 	if not def.tile_back then
@@ -444,36 +510,6 @@ function doors.register_trapdoor(name, def)
 	doors.registered_trapdoors[name_closed] = true
 end
 
-doors.register("door_wood", {
-	description = S("Wooden Door"),
-	model = "door_new",
-	tiles = {"doors_door_wood.png"},
-	inventory_image = "doors_item_wood.png",
-	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
-	recipe = {
-		{"group:wood", "group:wood"},
-		{"group:wood", "group:wood"},
-		{"group:wood", "group:wood"},
-	}
-})
-
-doors.register("door_steel", {
-	description = S("Steel Door"),
-	model = "door_new",
-	tiles = {"doors_door_steel.png"},
-	inventory_image = "doors_item_steel.png",
-	protected = true,
-	groups = {cracky = 1, level = 2},
-	sounds = default.node_sound_metal_defaults(),
-	sound_open = "doors_steel_door_open",
-	sound_close = "doors_steel_door_close",
-	recipe = {
-		{"default:steel_ingot", "default:steel_ingot"},
-		{"default:steel_ingot", "default:steel_ingot"},
-		{"default:steel_ingot", "default:steel_ingot"},
-	}
-})
-
 doors.register_trapdoor("trapdoor", {
 	description = S("Wooden Trapdoor"),
 	model = "trapdoor_new",
@@ -482,6 +518,8 @@ doors.register_trapdoor("trapdoor", {
 	tile_front = "doors_trapdoor.png",
 	tile_side = "doors_trapdoor_side.png",
 	tile_back = "doors_trapdoor_back.png",
+	gain_open = 0.06,
+	gain_close = 0.13,
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2, door = 1},
 })
 
@@ -497,6 +535,8 @@ doors.register_trapdoor("trapdoor_steel", {
 	sounds = default.node_sound_metal_defaults(),
 	sound_open = "doors_steel_door_open",
 	sound_close = "doors_steel_door_close",
+	gain_open = 0.2,
+	gain_close = 0.2,
 	groups = {cracky = 1, level = 2, door = 1},
 })
 
