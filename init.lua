@@ -274,31 +274,21 @@ function doors.register(name, def)
 	def.collision_box = {type = "fixed", fixed = {-1/2,-1/2,-1/2,1/2,3/2,-6/16}}
 	def.use_texture_alpha = "clip"
 
-	if def.model then
-		def.mesh = def.model .. "_a.obj"
-		minetest.register_node(":" .. name .. "_a", def)
-
-		def.mesh = def.model .. "_b.obj"
-		minetest.register_node(":" .. name .. "_b", def)
-
-		def.mesh = def.model .. "_a2.obj"
-		minetest.register_node(":" .. name .. "_c", def)
-
-		def.mesh = def.model .. "_b2.obj"
-		minetest.register_node(":" .. name .. "_d", def)
-	else
-		def.mesh = "door_a.obj"
-		minetest.register_node(":" .. name .. "_a", def)
-
-		def.mesh = "door_b.obj"
-		minetest.register_node(":" .. name .. "_b", def)
-
-		def.mesh = "door_a2.obj"
-		minetest.register_node(":" .. name .. "_c", def)
-
-		def.mesh = "door_b2.obj"
-		minetest.register_node(":" .. name .. "_d", def)
+	if def.model == nil then
+		def.model = "door"
 	end
+
+	def.mesh = def.model .. "_a.b3d"
+	minetest.register_node(":" .. name .. "_a", def)
+
+	def.mesh = def.model .. "_b.b3d"
+	minetest.register_node(":" .. name .. "_b", def)
+
+	def.mesh = def.model .. "_b.b3d"
+	minetest.register_node(":" .. name .. "_c", def)
+
+	def.mesh = def.model .. "_a.b3d"
+	minetest.register_node(":" .. name .. "_d", def)
 
 	doors.registered_doors[name .. "_a"] = true
 	doors.registered_doors[name .. "_b"] = true
@@ -309,7 +299,7 @@ end
 doors.register("door_wood", {
 	tiles = {{ name = "doors_door_wood.png", backface_culling = true }},
 	description = S("Wooden Door"),
-	model = "door_new",
+	model = "door_cross",
 	inventory_image = "doors_item_wood.png",
 	groups = {node = 1, choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
 	gain_open = 0.06,
@@ -324,7 +314,7 @@ doors.register("door_wood", {
 doors.register("door_steel", {
 	tiles = {{name = "doors_door_steel.png", backface_culling = true}},
 	description = S("Steel Door"),
-	model = "door_new",
+	model = "door_cross",
 	inventory_image = "doors_item_steel.png",
 	protected = true,
 	groups = {node = 1, cracky = 1, level = 2},

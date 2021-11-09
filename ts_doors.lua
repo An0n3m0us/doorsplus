@@ -32,7 +32,7 @@ function ts_doors.register_door(item, model, description, texture, sounds, recip
 	doors.register("ts_doors:door_" .. item:gsub(":", "_"), {
 		tiles = { { name = "[combine:32x38:0,0=" .. texture .. ":0,16=" .. texture .. ":0,32=" .. texture .. ":16,0=" .. texture .. ":16,16=" .. texture .. ":16,32=" .. texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base.png^[noalpha^[makealpha:0,255,0", backface_culling = true } },
 		description = description .. " Windowed Door",
-		model = model .. "new",
+		model = model .. "cross",
 		inventory_image = "[combine:32x32:0,8=" .. texture .. ":16,8=" .. texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_inv.png^[noalpha^[makealpha:0,255,0",
 		groups = table.copy(door_groups),
 		sounds = sounds.sounds or nil,
@@ -52,7 +52,7 @@ function ts_doors.register_door(item, model, description, texture, sounds, recip
 
 	doors.register_trapdoor("ts_doors:trapdoor_" .. item:gsub(":", "_"), {
 		description = "Windowed " .. description .. " Trapdoor",
-		model = "trap" .. model .. "new",
+		model = "trap" .. model .. "cross",
 		inventory_image = texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_trapdoor.png^[noalpha^[makealpha:0,255,0",
 		wield_image = texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_trapdoor.png^[noalpha^[makealpha:0,255,0",
 		tile_front = texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_trapdoor.png^[noalpha^[makealpha:0,255,0",
@@ -80,7 +80,7 @@ function ts_doors.register_door(item, model, description, texture, sounds, recip
 	doors.register("ts_doors:door_locked_" .. item:gsub(":", "_"), {
 		tiles = { { name = "[combine:32x38:0,0=" .. texture .. ":0,16=" .. texture .. ":0,32=" .. texture .. ":16,0=" .. texture .. ":16,16=" .. texture .. ":16,32=" .. texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_locked.png^[noalpha^[makealpha:0,255,0", backface_culling = true } },
 		description = "Windowed Locked " .. description .. " Door",
-		model = model .. "new",
+		model = model .. "cross",
 		inventory_image = "[combine:32x32:0,8=" .. texture .. ":16,8=" .. texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_locked_inv.png^[noalpha^[makealpha:0,255,0",
 		protected = true,
 		groups = table.copy(door_groups),
@@ -106,7 +106,7 @@ function ts_doors.register_door(item, model, description, texture, sounds, recip
 
 	doors.register_trapdoor("ts_doors:trapdoor_locked_" .. item:gsub(":", "_"), {
 		description = "Windowed Locked " .. description .. " Trapdoor",
-		model = "trap" .. model .. "new",
+		model = "trap" .. model .. "cross",
 		inventory_image = texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_trapdoor_locked.png^[noalpha^[makealpha:0,255,0",
 		wield_image = texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_trapdoor_locked.png^[noalpha^[makealpha:0,255,0",
 		tile_front = texture .. "^[transformR90^[colorize:#fff:30^ts_doors_base_trapdoor_locked.png^[noalpha^[makealpha:0,255,0",
